@@ -8,7 +8,7 @@ import time
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key = GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-2.0-flash')
+model = genai.GenerativeModel('models/gemini-2.0-flash-lite-preview-02-05')
 
 client = chromadb.PersistentClient(path="./med_db")
 collection = client.get_collection(name="medical_abstracts")
@@ -63,7 +63,7 @@ def generate_prompt(query, results):
 
 query_list = [
     "How does caffeine consumption affect sleep latency?",
-    "What is the impact of caffeine on REM sleep cycles?",
+    "What is the impact of caffeine on REM sleep cycles?"
     "Does caffeine act as an adenosine receptor antagonist?",
     "How long before bed should caffeine be avoided to prevent insomnia?",
     "What is the role of amyloid plaques in Alzheimer's disease?",
@@ -109,7 +109,7 @@ for query in query_list:
             response_text = response.text
             break
         except Exception as e:
-            print(f"Hit rate limit while getting answer. Will wait {TIMEOUT} seconds")
+            print(f"Hit rate limit while getting answer. Will wait {TIMEOUT} seconds. {e}")
             time.sleep(TIMEOUT)
 
     metadatas = results['metadatas'][0]
